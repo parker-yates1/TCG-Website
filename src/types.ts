@@ -44,6 +44,22 @@ export interface ShippingInfo {
     country: string;
 }
 
+export interface StoreEvent {
+    id: string;
+    title: string;
+    storeName: string;
+    storeAddress: string;
+    date: string;
+    time: string;
+    game: string;
+    format: string;
+    entryFee?: string;
+    prizeSupport?: string;
+    description?: string;
+    imageUrl?: string;
+    storeLogoUrl?: string;
+}
+
 
 
 

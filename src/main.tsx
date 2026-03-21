@@ -15,6 +15,7 @@ import Sell from './pages/Sell'
 import About from './pages/About'
 import MassEntry from './pages/MassEntry'
 import Stores from './pages/Stores'
+import Events from './pages/Events'
 import { NotificationProvider } from './context/NotificationContext'
 import { AuthProvider } from './context/AuthContext'
 import { ShopProvider } from './context/ShopContext'
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/mass-entry" element={<MassEntry />} />
                 <Route path="/stores" element={<Stores />} />
+                <Route path="/events" element={<Events />} />
             </Routes>
 
             <CardDetailModal />

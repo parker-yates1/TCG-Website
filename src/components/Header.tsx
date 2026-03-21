@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, ShoppingCart, User, Heart, Menu } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Search, ShoppingCart, User, Heart, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useShop } from '../context/ShopContext';
@@ -11,6 +11,13 @@ const Header: React.FC = () => {
     const { cart, wishlist } = useShop();
     const { isLoggedIn } = useAuth();
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const scrollRef = useRef<HTMLElement>(null);
+
+    const scrollBy = (amount: number) => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+    };
 
     return (
         <header className="sticky top-0 z-50 shadow-sm flex flex-col">
@@ -81,20 +88,31 @@ const Header: React.FC = () => {
             </div>
 
             {/* Secondary Navigation */}
-            <div className="bg-black text-white py-2 hidden md:block">
-                <div className="max-w-7xl mx-auto px-4">
-                    <nav className="flex gap-6 text-sm font-bold">
-                        <Link to="/" className="hover:text-gray-300">Magic: The Gathering</Link>
-                        <Link to="/" className="hover:text-gray-300">Yu-Gi-Oh!</Link>
-                        <Link to="/" className="hover:text-gray-300">Pokémon</Link>
-                        <Link to="/" className="hover:text-gray-300">Disney Lorcana</Link>
-                        <Link to="/" className="hover:text-gray-300">One Piece</Link>
-                        <Link to="/" className="hover:text-gray-300">Digimon</Link>
-                        <Link to="/" className="hover:text-gray-300">Star Wars: Unlimited</Link>
-                        <Link to="/" className="hover:text-gray-300">Flesh and Blood</Link>
-                        <Link to="/stores" className="hover:text-gray-300 ml-auto font-normal">Local Stores</Link>
-                        <Link to="/sell" className="hover:text-gray-300 font-normal">Sell</Link>
-                        <Link to="/mass-entry" className="hover:text-gray-300 font-normal">Mass Entry</Link>
+            <div className="bg-black text-white py-2 hidden md:block border-t border-gray-800">
+                <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                    <div className="flex-1 flex items-center mr-8 min-w-0">
+                        <button onClick={() => scrollBy(-200)} className="text-gray-400 hover:text-white shrink-0 mr-4 transition-colors">
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <nav ref={scrollRef} className="flex gap-6 text-sm font-bold overflow-x-auto overflow-y-hidden flex-1 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-1">
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Magic: The Gathering</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Yu-Gi-Oh!</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Pokémon</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Disney Lorcana</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">One Piece</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Digimon</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Star Wars: Unlimited</Link>
+                            <Link to="/" className="hover:text-gray-300 shrink-0">Flesh and Blood</Link>
+                        </nav>
+                        <button onClick={() => scrollBy(200)} className="text-gray-400 hover:text-white shrink-0 ml-4 transition-colors">
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <nav className="flex gap-6 text-sm whitespace-nowrap shrink-0">
+                        <Link to="/stores" className="hover:text-gray-300">Local Stores</Link>
+                        <Link to="/events" className="hover:text-gray-300">Events</Link>
+                        <Link to="/sell" className="hover:text-gray-300">Sell</Link>
+                        <Link to="/mass-entry" className="hover:text-gray-300">Mass Entry</Link>
                     </nav>
                 </div>
             </div>
@@ -114,6 +132,7 @@ const Header: React.FC = () => {
                     <nav className="flex flex-col gap-3">
                         <Link to="/" onClick={() => setShowMobileMenu(false)} className="py-2 border-b border-gray-800">Browse</Link>
                         <Link to="/stores" onClick={() => setShowMobileMenu(false)} className="py-2 border-b border-gray-800">Local Stores</Link>
+                        <Link to="/events" onClick={() => setShowMobileMenu(false)} className="py-2 border-b border-gray-800">Events</Link>
                         <Link to="/sell" onClick={() => setShowMobileMenu(false)} className="py-2 border-b border-gray-800">Sell</Link>
                         <Link to="/mass-entry" onClick={() => setShowMobileMenu(false)} className="py-2 border-b border-gray-800">Mass Entry</Link>
                         <Link to="/about" onClick={() => setShowMobileMenu(false)} className="py-2">About</Link>
