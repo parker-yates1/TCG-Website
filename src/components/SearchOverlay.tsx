@@ -75,7 +75,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ query, results, isLoading
                                     </p>
                                     <p className="text-xs text-gray-500 truncate">{card.setName}</p>
                                 </div>
-                                {/* <div className="text-right shrink-0">
+                                <div className="text-right shrink-0">
                                     {card.priceUsd && (
                                         <p className="text-sm font-bold text-gray-800">${card.priceUsd}</p>
                                     )}
@@ -85,7 +85,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ query, results, isLoading
                                     {!card.priceUsd && !card.priceUsdFoil && (
                                         <p className="text-xs text-gray-400">No price</p>
                                     )}
-                                </div> */}
+                                </div>
                             </li>
                         ))}
                     </ul>

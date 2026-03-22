@@ -38,8 +38,12 @@ const Cart: React.FC = () => {
                 <div className="lg:col-span-2 space-y-4">
                     {cart.map(item => (
                         <div key={item.id} className="bg-white rounded-lg shadow-md p-6 flex gap-6">
-                            <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg w-24 h-24 flex items-center justify-center text-4xl flex-shrink-0">
-                                {item.image}
+                            <div className="rounded-lg w-24 h-24 overflow-hidden flex-shrink-0">
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
 
                             <div className="flex-1">

@@ -14,16 +14,24 @@ const CardDetailModal: React.FC = () => {
                 <div className="grid md:grid-cols-2">
                     {/* Left: Image Section */}
                     <div className="relative bg-gray-50 p-8 md:p-12 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
-                        <div className="relative z-10 aspect-[3/4] w-full max-w-sm bg-white rounded-xl shadow-lg flex items-center justify-center p-8 transform transition-transform hover:scale-105 duration-500">
-                            <div className="text-[8rem] filter drop-shadow-xl">{selectedCard.image}</div>
+                        <div className="relative z-10 aspect-[3/4] w-full max-w-sm rounded-xl shadow-lg overflow-hidden transform transition-transform hover:scale-105 duration-500">
+                            <img
+                                src={selectedCard.image}
+                                alt={selectedCard.name}
+                                className="w-full h-full object-cover"
+                            />
                             {/* Shiny overlay */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/30 rounded-xl pointer-events-none" />
                         </div>
 
                         <div className="mt-8 flex gap-3 overflow-x-auto max-w-full p-2 scrollbar-hide">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className="w-16 h-16 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-2xl cursor-pointer hover:border-blue-500 hover:shadow-md transition-all">
-                                    {selectedCard.image}
+                                <div key={i} className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all flex-shrink-0">
+                                    <img
+                                        src={selectedCard.image}
+                                        alt={selectedCard.name}
+                                        className="w-full h-full object-cover"
+                                    />
                                 </div>
                             ))}
                         </div>

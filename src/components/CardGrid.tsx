@@ -48,8 +48,12 @@ const CardGrid: React.FC = () => {
                         className={`bg-white rounded-lg border border-gray-100 hover:border-blue-300 shadow-sm flex items-center transition-all hover:shadow-md cursor-pointer group ${compactView ? 'p-2 gap-2' : 'p-4 gap-4'}`}
                     >
                         {/* Thumbnail */}
-                        <div className={`bg-gray-100 rounded flex items-center justify-center flex-shrink-0 ${compactView ? 'w-10 h-14 text-xl' : 'w-16 h-20 text-2xl'}`}>
-                            {card.image}
+                        <div className={`bg-gray-100 rounded overflow-hidden flex-shrink-0 ${compactView ? 'w-10 h-14' : 'w-16 h-20'}`}>
+                            <img
+                                src={card.image}
+                                alt={card.name}
+                                className="w-full h-full object-cover"
+                            />
                         </div>
 
                         {/* Info */}
@@ -97,10 +101,12 @@ const CardGrid: React.FC = () => {
                     onClick={() => setSelectedCard(card)}
                 >
                     {/* Image Area */}
-                    <div className={`relative bg-white flex items-center justify-center group-hover:bg-gray-50 transition-colors ${compactView ? 'p-3 aspect-[3/4]' : 'p-6 aspect-[3/4]'}`}>
-                        <div className={`${compactView ? 'text-4xl' : 'text-6xl'} drop-shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
-                            {card.image}
-                        </div>
+                    <div className="relative bg-white overflow-hidden aspect-[3/4]">
+                        <img
+                            src={card.image}
+                            alt={card.name}
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                        />
 
                         {/* Foil Effect Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-white/40 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

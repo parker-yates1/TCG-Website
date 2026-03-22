@@ -27,8 +27,12 @@ const Wishlist: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {wishlist.map(card => (
                         <div key={card.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <div className="relative bg-gradient-to-br from-blue-100 to-purple-100 p-8 h-48 flex items-center justify-center">
-                                <div className="text-6xl">{card.image}</div>
+                            <div className="relative overflow-hidden h-48">
+                                <img
+                                    src={card.image}
+                                    alt={card.name}
+                                    className="w-full h-full object-cover"
+                                />
                                 <button
                                     onClick={() => toggleWishlist(card)}
                                     className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
