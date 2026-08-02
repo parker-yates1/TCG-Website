@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Package, TrendingUp, CreditCard } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
@@ -6,6 +6,22 @@ const Sell: React.FC = () => {
     const { showNotification } = useNotification();
     const games = ['Magic: The Gathering', 'Pokemon', 'Yu-Gi-Oh!', 'Lorcana'];
     const conditions = ['Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played'];
+
+    const [cardName, setCardName] = useState('');
+    const [game, setGame] = useState('');
+    const [condition, setCondition] = useState('');
+    const [price, setPrice] = useState('');
+    const [quantity, setQuantity] = useState('1');
+    const [openToShipping, setOpenToShipping] = useState(false);
+    const [areaCode, setAreaCode] = useState('');
+
+    const isFormValid =
+        cardName.trim() !== '' &&
+        game !== '' &&
+        condition !== '' &&
+        price.trim() !== '' &&
+        !isNaN(Number(price)) &&
+        Number(price) > 0;
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-8">
@@ -40,9 +56,14 @@ const Sell: React.FC = () => {
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Card Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Card Name <span className="text-red-500">*</span>
+                        </label>
                         <input
                             type="text"
+                            required
+                            value={cardName}
+                            onChange={(e) => setCardName(e.target.value)}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter card name"
                         />
@@ -50,27 +71,48 @@ const Sell: React.FC = () => {
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Game</label>
-                            <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>Select game</option>
-                                {games.map(game => <option key={game} value={game}>{game}</option>)}
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Game <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                                required
+                                value={game}
+                                onChange={(e) => setGame(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">Select game</option>
+                                {games.map(g => <option key={g} value={g}>{g}</option>)}
                             </select>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
-                            <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>Select condition</option>
-                                {conditions.map(condition => <option key={condition} value={condition}>{condition}</option>)}
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Condition <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                                required
+                                value={condition}
+                                onChange={(e) => setCondition(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">Select condition</option>
+                                {conditions.map(c => <option key={c} value={c}>{c}</option>)}
                             </select>
                         </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Price <span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="number"
+                                step="0.01"
+                                min="0"
+                                required
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="0.00"
                             />
@@ -80,10 +122,36 @@ const Sell: React.FC = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
                             <input
                                 type="number"
+                                min="1"
+                                value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="1"
                             />
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Seller Area Code / Zip Code</label>
+                        <input
+                            type="text"
+                            value={areaCode}
+                            onChange={(e) => setAreaCode(e.target.value)}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="e.g. 90210"
+                        />
+                    </div>
+
+                    <div className="flex items-center py-1">
+                        <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 select-none">
+                            <input
+                                type="checkbox"
+                                checked={openToShipping}
+                                onChange={(e) => setOpenToShipping(e.target.checked)}
+                                className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                            />
+                            <span className="font-medium">Open to shipping</span>
+                        </label>
                     </div>
 
                     <div>
@@ -95,8 +163,20 @@ const Sell: React.FC = () => {
                     </div>
 
                     <button
-                        onClick={() => showNotification('Card listed successfully!')}
-                        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                        disabled={!isFormValid}
+                        onClick={() => {
+                            if (isFormValid) {
+                                showNotification('Card listed successfully!');
+                                setCardName('');
+                                setGame('');
+                                setCondition('');
+                                setPrice('');
+                                setQuantity('1');
+                                setOpenToShipping(false);
+                                setAreaCode('');
+                            }
+                        }}
+                        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                         List Card for Sale
                     </button>

@@ -22,7 +22,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     const formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
             {event.imageUrl ? (
                 <div className="h-40 w-full relative">
                     <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover" />

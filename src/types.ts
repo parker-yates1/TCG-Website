@@ -61,6 +61,20 @@ export interface StoreEvent {
 }
 
 
-
-
-
+export interface UserProfile {
+    id: number;
+    username: string;
+    email: string;
+    displayName: string;
+    bio: string;
+    sellerRating: number;
+    totalSales: number;
+    totalPurchases: number;
+    verifiedSeller: boolean;
+    createdAt: string;
+    locationSharingEnabled: boolean | null;
+    latitude: number | null;
+    longitude: number | null;
+    locationAccuracyMeters: number | null;
+    locationUpdatedAt: string | null;
+}

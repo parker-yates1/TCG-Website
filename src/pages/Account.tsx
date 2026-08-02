@@ -2,14 +2,20 @@ import React from 'react';
 import { Package, Heart, MapPin, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
 import { useShop } from '../context/ShopContext';
 import { useNotification } from '../context/NotificationContext';
 
 const Account: React.FC = () => {
     const navigate = useNavigate();
     const { userEmail, logout } = useAuth();
+    const { user, clearUser } = useUser();
     const { wishlist } = useShop();
     const { showNotification } = useNotification();
+
+    const displayName = user?.displayName || user?.username || 'John Doe';
+    const email = user?.email || userEmail || 'john.doe@example.com';
+    const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-8">
@@ -17,15 +23,16 @@ const Account: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
                         <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-                            JD
+                            {initials}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold">John Doe</h2>
-                            <p className="text-gray-600">{userEmail || 'john.doe@example.com'}</p>
+                            <h2 className="text-2xl font-bold">{displayName}</h2>
+                            <p className="text-gray-600">{email}</p>
                         </div>
                     </div>
                     <button
                         onClick={() => {
+                            clearUser();
                             logout();
                             showNotification('Logged out successfully', 'info');
                             navigate('/');

@@ -20,6 +20,7 @@ import { NotificationProvider } from './context/NotificationContext'
 import { AuthProvider } from './context/AuthContext'
 import { ShopProvider } from './context/ShopContext'
 import { ProductProvider } from './context/ProductContext'
+import { UserProvider } from './context/UserContext'
 
 function App() {
     return (
@@ -50,13 +51,15 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <NotificationProvider>
             <AuthProvider>
-                <ProductProvider>
-                    <ShopProvider>
-                        <BrowserRouter>
-                            <App />
-                        </BrowserRouter>
-                    </ShopProvider>
-                </ProductProvider>
+                <UserProvider>
+                    <ProductProvider>
+                        <ShopProvider>
+                            <BrowserRouter>
+                                <App />
+                            </BrowserRouter>
+                        </ShopProvider>
+                    </ProductProvider>
+                </UserProvider>
             </AuthProvider>
         </NotificationProvider>
     </StrictMode>,

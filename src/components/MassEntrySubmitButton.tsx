@@ -33,7 +33,7 @@ const MassEntrySubmitButton: React.FC<MassEntrySubmitButtonProps> = ({ entryText
         <button
             onClick={handleClick}
             disabled={!entryText.trim()}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium cursor-pointer"
         >
             Process List
         </button>

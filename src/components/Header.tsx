@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Search, ShoppingCart, User, Heart, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useShop } from '../context/ShopContext';
 import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
 import { useCardSearch } from '../hooks/useCardSearch';
 import SearchOverlay from './SearchOverlay';
 
@@ -12,9 +13,27 @@ const Header: React.FC = () => {
     const { searchQuery, setSearchQuery } = useProduct();
     const { cart, wishlist } = useShop();
     const { isLoggedIn } = useAuth();
+    const { user } = useUser();
+    const signedIn = isLoggedIn || !!user;
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const scrollRef = useRef<HTMLElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
     const { query, results, isLoading, isOpen, error, handleInputChange, handleFocus, handleClose } = useCardSearch();
+
+    const checkScroll = () => {
+        if (scrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            setCanScrollLeft(scrollLeft > 1);
+            setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+        }
+    };
+
+    useEffect(() => {
+        checkScroll();
+        window.addEventListener('resize', checkScroll);
+        return () => window.removeEventListener('resize', checkScroll);
+    }, []);
 
     const scrollBy = (amount: number) => {
         if (scrollRef.current) {
@@ -58,18 +77,18 @@ const Header: React.FC = () => {
 
                         <div className="flex items-center gap-2 md:gap-4">
                             <button
-                                onClick={() => navigate(isLoggedIn ? '/account' : '/login')}
-                                className="flex items-center gap-1 text-sm font-medium hover:text-blue-300 transition"
+                                onClick={() => navigate(signedIn ? '/account' : '/login')}
+                                className="flex items-center gap-1 text-sm font-medium hover:text-blue-300 transition cursor-pointer"
                             >
                                 <User className="w-5 h-5" />
-                                <span className="hidden sm:inline">Sign In</span>
+                                <span className="hidden sm:inline">{signedIn ? 'Account' : 'Sign In'}</span>
                             </button>
 
                             <button
                                 onClick={() => navigate('/wishlist')}
-                                className="relative p-2 hover:bg-white/10 rounded-lg transition"
+                                className="relative p-2 hover:bg-white/10 rounded-lg transition "
                             >
-                                <Heart className="w-6 h-6" fill={wishlist.length > 0 ? 'currentColor' : 'none'} />
+                                <Heart className="w-6 h-6 cursor-pointer" fill={wishlist.length > 0 ? 'currentColor' : 'none'} />
                                 {wishlist.length > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                         {wishlist.length}
@@ -81,7 +100,7 @@ const Header: React.FC = () => {
                                 onClick={() => navigate('/cart')}
                                 className="relative p-2 hover:bg-white/10 rounded-lg transition"
                             >
-                                <ShoppingCart className="w-6 h-6" />
+                                <ShoppingCart className="w-6 h-6 cursor-pointer" />
                                 {cart.length > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                         {cart.length}
@@ -104,10 +123,22 @@ const Header: React.FC = () => {
             <div className="bg-black text-white py-2 hidden md:block border-t border-gray-800">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <div className="flex-1 flex items-center mr-8 min-w-0">
-                        <button onClick={() => scrollBy(-200)} className="text-gray-400 hover:text-white shrink-0 mr-4 transition-colors">
+                        <button 
+                            onClick={() => scrollBy(-200)} 
+                            disabled={!canScrollLeft}
+                            className={`text-gray-400 transition-all shrink-0 mr-4 ${
+                                canScrollLeft 
+                                    ? 'hover:text-white cursor-pointer opacity-100' 
+                                    : 'opacity-30 cursor-default'
+                            }`}
+                        >
                             <ChevronLeft className="w-5 h-5" />
                         </button>
-                        <nav ref={scrollRef} className="flex gap-6 text-sm font-bold overflow-x-auto overflow-y-hidden flex-1 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-1">
+                        <nav 
+                            ref={scrollRef} 
+                            onScroll={checkScroll}
+                            className="flex gap-6 text-sm font-bold overflow-x-auto overflow-y-hidden flex-1 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-1"
+                        >
                             <Link to="/" className="hover:text-gray-300 shrink-0">Magic: The Gathering</Link>
                             <Link to="/" className="hover:text-gray-300 shrink-0">Yu-Gi-Oh!</Link>
                             <Link to="/" className="hover:text-gray-300 shrink-0">Pokémon</Link>
@@ -117,7 +148,15 @@ const Header: React.FC = () => {
                             <Link to="/" className="hover:text-gray-300 shrink-0">Star Wars: Unlimited</Link>
                             <Link to="/" className="hover:text-gray-300 shrink-0">Flesh and Blood</Link>
                         </nav>
-                        <button onClick={() => scrollBy(200)} className="text-gray-400 hover:text-white shrink-0 ml-4 transition-colors">
+                        <button 
+                            onClick={() => scrollBy(200)} 
+                            disabled={!canScrollRight}
+                            className={`text-gray-400 transition-all shrink-0 ml-4 ${
+                                canScrollRight 
+                                    ? 'hover:text-white cursor-pointer opacity-100' 
+                                    : 'opacity-30 cursor-default'
+                            }`}
+                        >
                             <ChevronRight className="w-5 h-5" />
                         </button>
                     </div>

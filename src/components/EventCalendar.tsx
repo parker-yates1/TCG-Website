@@ -53,7 +53,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ events, selectedDate, onS
             <div className="flex items-center justify-between mb-6">
                 <button 
                     onClick={prevMonth}
-                    className="p-2 hover:bg-gray-100 rounded-full transition text-gray-600"
+                    className="p-2 hover:bg-gray-100 rounded-full transition text-gray-600 cursor-pointer"
                 >
                     &larr;
                 </button>
@@ -62,7 +62,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ events, selectedDate, onS
                 </h3>
                 <button 
                     onClick={nextMonth}
-                    className="p-2 hover:bg-gray-100 rounded-full transition text-gray-600"
+                    className="p-2 hover:bg-gray-100 rounded-full transition text-gray-600 cursor-pointer"
                 >
                     &rarr;
                 </button>
@@ -94,9 +94,10 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ events, selectedDate, onS
                             key={dayNumber}
                             onClick={() => handleDayClick(dayNumber)}
                             className={`
-                                h-10 w-10 mx-auto rounded-full flex items-center justify-center relative text-sm font-medium transition-all
+                                h-10 w-10 mx-auto rounded-full flex items-center justify-center relative text-sm font-medium transition-all cursor-pointer
                                 ${isSelected ? 'bg-blue-600 text-white shadow-md scale-110' : 'hover:bg-blue-50'}
                                 ${isToday && !isSelected ? 'text-blue-600 font-extrabold border-2 border-blue-200' : 'text-gray-700'}
+                                ${hasEvent && !isSelected ? 'font-bold' : ''}
                             `}
                         >
                             {dayNumber}

@@ -30,21 +30,21 @@ const Events: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                
+
                 {/* Left Column - Calendar (Sticky) */}
                 <div className="lg:col-span-1 lg:sticky lg:top-24">
-                    <EventCalendar 
-                        events={mockEvents} 
-                        selectedDate={selectedDate} 
-                        onSelectDate={setSelectedDate} 
+                    <EventCalendar
+                        events={mockEvents}
+                        selectedDate={selectedDate}
+                        onSelectDate={setSelectedDate}
                     />
-                    
+
                     {selectedDate && (
                         <div className="mt-4 flex justify-between items-center bg-blue-50 text-blue-800 px-4 py-3 rounded-lg border border-blue-100">
                             <span className="text-sm font-medium">Filtering by specific date</span>
-                            <button 
+                            <button
                                 onClick={() => setSelectedDate(null)}
-                                className="text-sm font-bold hover:text-blue-900 underline decoration-blue-300 underline-offset-2"
+                                className="text-sm font-bold hover:text-blue-900 underline decoration-blue-300 underline-offset-2 cursor-pointer"
                             >
                                 Clear
                             </button>
@@ -57,18 +57,18 @@ const Events: React.FC = () => {
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-gray-800 flex items-center">
                             <Calendar className="w-5 h-5 mr-2 text-blue-600" />
-                            {selectedDate 
+                            {selectedDate
                                 ? `Events on ${new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })}`
                                 : "Upcoming Events"
                             }
                         </h3>
-                        <span className="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1 rounded-full">
+                        <span className="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1 rounded-full cursor-pointer">
                             {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
                         </span>
                     </div>
 
                     {filteredEvents.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                             {filteredEvents.map(event => (
                                 <EventCard key={event.id} event={event} />
                             ))}
