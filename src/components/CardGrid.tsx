@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Heart } from 'lucide-react';
 import { useProduct } from '../context/ProductContext';
 import { useShop } from '../context/ShopContext';
+import CardHoverPanel from './CardHoverPanel';
 
 const CardGrid: React.FC = () => {
+    const [hoveredPanelCardId, setHoveredPanelCardId] = useState<number | string | null>(null);
+
     const {
         cards,
         setSelectedCard,
@@ -95,9 +98,12 @@ const CardGrid: React.FC = () => {
             {cards.map(card => (
                 <div
                     key={card.id}
-                    className="group bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col overflow-hidden relative hover:-translate-y-1"
+                    className="group bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col overflow-hidden relative border border-gray-200/80"
                     onMouseEnter={() => setHoveredCard(card.id)}
-                    onMouseLeave={() => setHoveredCard(null)}
+                    onMouseLeave={() => {
+                        setHoveredCard(null);
+                        setHoveredPanelCardId(null);
+                    }}
                     onClick={() => setSelectedCard(card)}
                 >
                     {/* Image Area */}
@@ -105,7 +111,7 @@ const CardGrid: React.FC = () => {
                         <img
                             src={card.image}
                             alt={card.name}
-                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover"
                         />
 
                         {/* Foil Effect Gradient Overlay */}
@@ -121,8 +127,11 @@ const CardGrid: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Content Area */}
-                    <div className={`${compactView ? 'p-2' : 'p-4'} flex flex-col flex-1 gap-1`}>
+                    {/* Content Area (Trigger for expanding hover panel) */}
+                    <div
+                        onMouseEnter={() => setHoveredPanelCardId(card.id)}
+                        className={`relative z-10 bg-white/95 backdrop-blur-sm group-hover:bg-white transition-all duration-300 ${compactView ? 'p-2' : 'p-4'} flex flex-col flex-1 gap-1`}
+                    >
                         <div>
                             <p className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase mb-0.5">{card.game}</p>
                             <h3 className={`font-heading font-bold text-gray-900 leading-tight line-clamp-2 ${compactView ? 'text-xs min-h-[2rem]' : 'text-sm min-h-[2.5rem]'}`} title={card.name}>
@@ -148,6 +157,15 @@ const CardGrid: React.FC = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* 80% Expanding Hover Panel */}
+                    <CardHoverPanel
+                        card={card}
+                        isOpen={hoveredPanelCardId === card.id}
+                        compactView={compactView}
+                        onMouseEnter={() => setHoveredPanelCardId(card.id)}
+                        onMouseLeave={() => setHoveredPanelCardId(null)}
+                    />
                 </div>
             ))}
         </div>
