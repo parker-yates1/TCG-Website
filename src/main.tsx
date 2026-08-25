@@ -22,11 +22,12 @@ import { AuthProvider } from './context/AuthContext'
 import { ShopProvider } from './context/ShopContext'
 import { ProductProvider } from './context/ProductContext'
 import { UserProvider } from './context/UserContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { OnboardingProvider } from './context/OnboardingContext'
 
 function App() {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-[#0f172a] dark:text-white transition-colors duration-300">
             <Header />
             <Notification />
 
@@ -52,20 +53,22 @@ function App() {
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <NotificationProvider>
-            <AuthProvider>
-                <UserProvider>
-                    <OnboardingProvider>
-                        <ProductProvider>
-                            <ShopProvider>
-                                <BrowserRouter>
-                                    <App />
-                                </BrowserRouter>
-                            </ShopProvider>
-                        </ProductProvider>
-                    </OnboardingProvider>
-                </UserProvider>
-            </AuthProvider>
-        </NotificationProvider>
+        <ThemeProvider>
+            <NotificationProvider>
+                <AuthProvider>
+                    <UserProvider>
+                        <OnboardingProvider>
+                            <ProductProvider>
+                                <ShopProvider>
+                                    <BrowserRouter>
+                                        <App />
+                                    </BrowserRouter>
+                                </ShopProvider>
+                            </ProductProvider>
+                        </OnboardingProvider>
+                    </UserProvider>
+                </AuthProvider>
+            </NotificationProvider>
+        </ThemeProvider>
     </StrictMode>,
 )

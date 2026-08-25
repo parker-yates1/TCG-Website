@@ -66,15 +66,17 @@ const ShoppingModeSelector: React.FC<ShoppingModeSelectorProps> = ({
                             onClick={() => onChange(option.id)}
                             className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col justify-between cursor-pointer relative ${
                                 isSelected
-                                    ? 'border-blue-600 bg-blue-50/70 shadow-sm ring-1 ring-blue-600'
-                                    : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-gray-50'
+                                    ? 'border-blue-600 dark:border-violet-500 bg-blue-50/70 dark:bg-violet-950/30 shadow-sm ring-1 ring-blue-600 dark:ring-violet-500'
+                                    : 'border-gray-200 dark:border-white/10 bg-white dark:bg-[#0f172a] hover:border-blue-300 dark:hover:border-violet-500/50 hover:bg-gray-50 dark:hover:bg-white/5'
                             }`}
                         >
                             <div>
                                 <div className="flex items-center justify-between mb-2">
                                     <div
                                         className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                                            isSelected ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+                                            isSelected
+                                                ? 'bg-blue-600 dark:bg-violet-600 text-white'
+                                                : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300'
                                         }`}
                                     >
                                         <Icon className="w-5 h-5" />
@@ -82,29 +84,29 @@ const ShoppingModeSelector: React.FC<ShoppingModeSelectorProps> = ({
                                     <span
                                         className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                                             isSelected
-                                                ? 'bg-blue-200 text-blue-900'
-                                                : 'bg-gray-100 text-gray-600'
+                                                ? 'bg-blue-200 dark:bg-violet-900/60 text-blue-900 dark:text-violet-200'
+                                                : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300'
                                         }`}
                                     >
                                         {option.badge}
                                     </span>
                                 </div>
-                                <h4 className="font-bold text-gray-900 text-base mb-1">{option.title}</h4>
-                                <p className="text-xs text-gray-600 leading-relaxed">{option.description}</p>
+                                <h4 className="font-bold text-gray-900 dark:text-white text-base mb-1">{option.title}</h4>
+                                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{option.description}</p>
                             </div>
 
-                            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-                                <span className={`text-xs font-semibold ${isSelected ? 'text-blue-700' : 'text-gray-400'}`}>
+                            <div className="mt-4 pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between">
+                                <span className={`text-xs font-semibold ${isSelected ? 'text-blue-700 dark:text-violet-300' : 'text-gray-400 dark:text-gray-500'}`}>
                                     {isSelected ? 'Selected option' : 'Click to select'}
                                 </span>
                                 <div
                                     className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                                        isSelected ? 'text-blue-600' : 'text-gray-300'
+                                        isSelected ? 'text-blue-600 dark:text-violet-400' : 'text-gray-300 dark:text-gray-600'
                                     }`}
                                 >
                                     <CheckCircle2
                                         size={20}
-                                        className={isSelected ? 'fill-blue-600 text-white' : 'text-gray-300'}
+                                        className={isSelected ? 'fill-blue-600 dark:fill-violet-500 text-white' : 'text-gray-300 dark:text-gray-600'}
                                     />
                                 </div>
                             </div>

@@ -25,8 +25,8 @@ const Events: React.FC = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Local Events</h2>
-                <p className="text-gray-600">Find trading card game tournaments, prereleases, and casual play near you.</p>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Local Events</h2>
+                <p className="text-gray-600 dark:text-gray-400">Find trading card game tournaments, prereleases, and casual play near you.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -40,11 +40,11 @@ const Events: React.FC = () => {
                     />
 
                     {selectedDate && (
-                        <div className="mt-4 flex justify-between items-center bg-blue-50 text-blue-800 px-4 py-3 rounded-lg border border-blue-100">
+                        <div className="mt-4 flex justify-between items-center bg-blue-50 dark:bg-violet-900/20 text-blue-800 dark:text-violet-300 px-4 py-3 rounded-lg border border-blue-100 dark:border-white/10">
                             <span className="text-sm font-medium">Filtering by specific date</span>
                             <button
                                 onClick={() => setSelectedDate(null)}
-                                className="text-sm font-bold hover:text-blue-900 underline decoration-blue-300 underline-offset-2 cursor-pointer"
+                                className="text-sm font-bold hover:text-blue-900 dark:hover:text-violet-200 underline decoration-blue-300 dark:decoration-violet-400 underline-offset-2 cursor-pointer"
                             >
                                 Clear
                             </button>
@@ -55,14 +55,14 @@ const Events: React.FC = () => {
                 {/* Right Column - Event Cards */}
                 <div className="lg:col-span-2">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                            <Calendar className="w-5 h-5 mr-2 text-blue-600" />
+                        <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
+                            <Calendar className="w-5 h-5 mr-2 text-blue-600 dark:text-violet-400" />
                             {selectedDate
                                 ? `Events on ${new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })}`
                                 : "Upcoming Events"
                             }
                         </h3>
-                        <span className="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1 rounded-full cursor-pointer">
+                        <span className="bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded-full cursor-pointer">
                             {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
                         </span>
                     </div>
@@ -74,15 +74,15 @@ const Events: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+                        <div className="bg-white dark:bg-[#1e293b] rounded-xl shadow-sm border border-gray-100 dark:border-white/10 p-12 text-center transition-colors duration-300">
                             <div className="text-5xl mb-4">🗓️</div>
-                            <h4 className="text-lg font-bold text-gray-800 mb-2">No events found</h4>
-                            <p className="text-gray-500 max-w-sm mx-auto">
+                            <h4 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">No events found</h4>
+                            <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
                                 There are no events scheduled for this date. Try selecting another day or clearing your filter to see all upcoming events.
                             </p>
                             <button
                                 onClick={() => setSelectedDate(null)}
-                                className="mt-6 px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
+                                className="mt-6 px-6 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 dark:hover:from-violet-700 dark:hover:to-blue-700 transition"
                             >
                                 View all events
                             </button>

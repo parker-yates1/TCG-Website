@@ -6,8 +6,6 @@ import {
     CreditCard,
     Sliders,
     Save,
-    RotateCcw,
-    CheckCircle2,
     Sparkles,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +25,7 @@ const Account: React.FC = () => {
     const { user, clearUser } = useUser();
     const { wishlist } = useShop();
     const { showNotification } = useNotification();
-    const { preferences, savePreferences, resetOnboarding } = useOnboarding();
+    const { preferences, savePreferences } = useOnboarding();
 
     const [isEditingPreferences, setIsEditingPreferences] = useState(false);
     const [selectedGames, setSelectedGames] = useState<string[]>(
@@ -67,23 +65,23 @@ const Account: React.FC = () => {
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
             {/* Profile Header */}
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
+            <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 md:p-8 transition-colors duration-300">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                        <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center text-white text-3xl font-extrabold shadow-md">
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-violet-600 dark:to-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl font-extrabold shadow-md">
                             {initials}
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-2xl font-bold text-gray-900">{displayName}</h2>
-                                <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{displayName}</h2>
+                                <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 dark:bg-violet-900/40 text-blue-800 dark:text-violet-300">
                                     Member
                                 </span>
                             </div>
-                            <p className="text-gray-500 text-sm">{email}</p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">{email}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                                 Preferred shopping:{' '}
-                                <span className="font-semibold text-gray-700 capitalize">
+                                <span className="font-semibold text-gray-700 dark:text-gray-300 capitalize">
                                     {preferences.shoppingMode ? preferences.shoppingMode.replace('_', ' ') : 'Not set'}
                                 </span>
                             </p>
@@ -94,7 +92,7 @@ const Account: React.FC = () => {
                         <button
                             type="button"
                             onClick={() => navigate('/welcome')}
-                            className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl text-sm transition flex items-center gap-1.5 cursor-pointer"
+                            className="px-4 py-2 bg-blue-50 dark:bg-white/5 hover:bg-blue-100 dark:hover:bg-white/10 text-blue-700 dark:text-violet-300 font-semibold rounded-xl text-sm transition flex items-center gap-1.5 cursor-pointer"
                         >
                             <Sparkles size={16} /> Re-run Setup Wizard
                         </button>
@@ -106,7 +104,7 @@ const Account: React.FC = () => {
                                 showNotification('Logged out successfully', 'info');
                                 navigate('/');
                             }}
-                            className="px-4 py-2 border border-red-300 text-red-600 hover:bg-red-50 font-semibold rounded-xl text-sm transition cursor-pointer"
+                            className="px-4 py-2 border border-red-300 dark:border-red-800/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 font-semibold rounded-xl text-sm transition cursor-pointer"
                         >
                             Logout
                         </button>
@@ -115,15 +113,15 @@ const Account: React.FC = () => {
             </div>
 
             {/* Preferences Management Section */}
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 md:p-8 transition-colors duration-300">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100 dark:border-white/10">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-violet-900/30 text-blue-700 dark:text-violet-400 flex items-center justify-center">
                             <Sliders size={20} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-gray-900">Marketplace & Game Preferences</h3>
-                            <p className="text-xs text-gray-500">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Marketplace & Game Preferences</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                                 Customize which games appear in your feeds and how shopping results are prioritized.
                             </p>
                         </div>
@@ -133,14 +131,13 @@ const Account: React.FC = () => {
                         type="button"
                         onClick={() => {
                             if (isEditingPreferences) {
-                                // reset local edit form to stored preferences
                                 setSelectedGames(preferences.interestedGames || []);
                                 setShoppingMode(preferences.shoppingMode || 'mix');
                                 setEmailNewsletter(preferences.emailNewsletter ?? true);
                             }
                             setIsEditingPreferences(!isEditingPreferences);
                         }}
-                        className="px-4 py-2 text-sm font-semibold rounded-xl border border-gray-300 hover:bg-gray-50 transition cursor-pointer"
+                        className="px-4 py-2 text-sm font-semibold rounded-xl border border-gray-300 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 transition cursor-pointer"
                     >
                         {isEditingPreferences ? 'Cancel' : 'Edit Preferences'}
                     </button>
@@ -149,8 +146,8 @@ const Account: React.FC = () => {
                 {!isEditingPreferences ? (
                     /* Read-Only Summary */
                     <div className="grid md:grid-cols-3 gap-6">
-                        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                                 Interested Games ({preferences.interestedGames?.length || 0})
                             </h4>
                             {preferences.interestedGames && preferences.interestedGames.length > 0 ? (
@@ -158,33 +155,33 @@ const Account: React.FC = () => {
                                     {preferences.interestedGames.map((game) => (
                                         <span
                                             key={game}
-                                            className="px-2.5 py-1 bg-white border border-gray-200 rounded-lg text-xs font-medium text-gray-800"
+                                            className="px-2.5 py-1 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-white/10 rounded-lg text-xs font-medium text-gray-800 dark:text-gray-200"
                                         >
                                             {game}
                                         </span>
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-500 italic">No specific games selected (showing all)</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 italic">No specific games selected (showing all)</p>
                             )}
                         </div>
 
-                        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                                 Shopping Preference
                             </h4>
-                            <p className="text-sm font-semibold text-gray-900 capitalize">
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white capitalize">
                                 {preferences.shoppingMode
                                     ? preferences.shoppingMode.replace('_', ' ')
                                     : 'Mix of local & online (Default)'}
                             </p>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 Prioritizes inventory according to your local and online balance.
                             </p>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                                 Email Notifications
                             </h4>
                             <div className="flex items-center gap-2">
@@ -193,11 +190,11 @@ const Account: React.FC = () => {
                                         preferences.emailNewsletter ? 'bg-green-500' : 'bg-gray-400'
                                     }`}
                                 />
-                                <p className="text-sm font-semibold text-gray-900">
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                     {preferences.emailNewsletter ? 'Subscribed to Alerts' : 'Unsubscribed'}
                                 </p>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 Deals, tournament alerts, and weekly price updates.
                             </p>
                         </div>
@@ -206,7 +203,7 @@ const Account: React.FC = () => {
                     /* Edit Mode */
                     <div className="space-y-8">
                         <div>
-                            <h4 className="text-base font-bold text-gray-900 mb-3">Favorite Trading Card Games</h4>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white mb-3">Favorite Trading Card Games</h4>
                             <GameSelector
                                 selectedGames={selectedGames}
                                 onChange={setSelectedGames}
@@ -215,7 +212,7 @@ const Account: React.FC = () => {
                         </div>
 
                         <div>
-                            <h4 className="text-base font-bold text-gray-900 mb-3">Shopping Priority</h4>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white mb-3">Shopping Priority</h4>
                             <ShoppingModeSelector
                                 selectedMode={shoppingMode}
                                 onChange={setShoppingMode}
@@ -224,18 +221,18 @@ const Account: React.FC = () => {
                         </div>
 
                         <div>
-                            <h4 className="text-base font-bold text-gray-900 mb-3">Email & Communication</h4>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white mb-3">Email & Communication</h4>
                             <EmailPreferenceToggle
                                 enabled={emailNewsletter}
                                 onChange={setEmailNewsletter}
                             />
                         </div>
 
-                        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-white/10">
                             <button
                                 type="button"
                                 onClick={() => setIsEditingPreferences(false)}
-                                className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-medium text-sm transition cursor-pointer"
+                                className="px-5 py-2.5 border border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 font-medium text-sm transition cursor-pointer"
                             >
                                 Cancel
                             </button>
@@ -243,7 +240,7 @@ const Account: React.FC = () => {
                                 type="button"
                                 onClick={handleSavePreferences}
                                 disabled={isSaving}
-                                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition flex items-center gap-2 cursor-pointer text-sm"
+                                className="px-6 py-2.5 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition flex items-center gap-2 cursor-pointer text-sm"
                             >
                                 <Save size={16} /> {isSaving ? 'Saving...' : 'Save Preferences'}
                             </button>
@@ -254,77 +251,77 @@ const Account: React.FC = () => {
 
             {/* Quick Actions Grid */}
             <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-violet-900/30 text-blue-600 dark:text-violet-400 flex items-center justify-center">
                             <Package className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-gray-900">Orders & Purchases</h3>
-                            <p className="text-xs text-gray-500">Track current shipments and order history</p>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Orders & Purchases</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Track current shipments and order history</p>
                         </div>
                     </div>
                     <button
                         type="button"
                         onClick={() => showNotification('Orders feature coming soon!', 'info')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
+                        className="px-4 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
                     >
                         View Orders
                     </button>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center">
                             <Heart className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-gray-900">Wishlist & Saved Cards</h3>
-                            <p className="text-xs text-gray-500">{wishlist.length} items saved</p>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Wishlist & Saved Cards</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{wishlist.length} items saved</p>
                         </div>
                     </div>
                     <button
                         type="button"
                         onClick={() => navigate('/wishlist')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
+                        className="px-4 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
                     >
                         View Wishlist
                     </button>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-emerald-950/40 text-green-600 dark:text-emerald-400 flex items-center justify-center">
                             <MapPin className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-gray-900">Shipping Addresses</h3>
-                            <p className="text-xs text-gray-500">Manage delivery locations and primary address</p>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Shipping Addresses</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Manage delivery locations and primary address</p>
                         </div>
                     </div>
                     <button
                         type="button"
                         onClick={() => showNotification('Address manager coming soon!', 'info')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
+                        className="px-4 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
                     >
                         Manage Addresses
                     </button>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-md border border-gray-100 dark:border-white/10 p-6 transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                             <CreditCard className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-gray-900">Payment Methods</h3>
-                            <p className="text-xs text-gray-500">Manage saved payment cards and billing</p>
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Payment Methods</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Manage saved payment cards and billing</p>
                         </div>
                     </div>
                     <button
                         type="button"
                         onClick={() => showNotification('Payment settings coming soon!', 'info')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
+                        className="px-4 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition cursor-pointer"
                     >
                         Manage Cards
                     </button>

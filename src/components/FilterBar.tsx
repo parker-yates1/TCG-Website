@@ -94,8 +94,8 @@ const FilterBar: React.FC = () => {
     };
 
     return (
-        <div className="bg-white sticky top-[62px] md:top-[100px] z-[49] bg-white transition-all duration-300">
-            <div className="border-b shadow-sm bg-white">
+        <div className="bg-white dark:bg-[#0f172a] sticky top-[62px] md:top-[100px] z-[49] transition-all duration-300">
+            <div className="border-b dark:border-white/10 shadow-sm bg-white dark:bg-[#0f172a]">
                 <div className="max-w-7xl mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
@@ -104,8 +104,8 @@ const FilterBar: React.FC = () => {
                             <button
                                 onClick={() => toggleDropdown('game')}
                                 className={`dropdown-button px-3 py-1.5 border rounded-full text-sm whitespace-nowrap flex items-center gap-1 transition-colors ${filters.game.length > 0 || activeDropdown === 'game'
-                                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium'
-                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                    ? 'bg-blue-50 dark:bg-violet-900/30 border-blue-200 dark:border-violet-500 text-blue-700 dark:text-violet-300 font-medium'
+                                    : 'border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-white/40'
                                     }`}
                             >
                                 {getButtonLabel('game', 'Game')} <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'game' ? 'rotate-180' : ''}`} />
@@ -115,8 +115,8 @@ const FilterBar: React.FC = () => {
                             <button
                                 onClick={() => toggleDropdown('rarity')}
                                 className={`dropdown-button px-3 py-1.5 border rounded-full text-sm whitespace-nowrap flex items-center gap-1 transition-colors ${filters.rarity.length > 0 || activeDropdown === 'rarity'
-                                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium'
-                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                    ? 'bg-blue-50 dark:bg-violet-900/30 border-blue-200 dark:border-violet-500 text-blue-700 dark:text-violet-300 font-medium'
+                                    : 'border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-white/40'
                                     }`}
                             >
                                 {getButtonLabel('rarity', 'Rarity')} <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'rarity' ? 'rotate-180' : ''}`} />
@@ -126,8 +126,8 @@ const FilterBar: React.FC = () => {
                             <button
                                 onClick={() => toggleDropdown('condition')}
                                 className={`dropdown-button px-3 py-1.5 border rounded-full text-sm whitespace-nowrap flex items-center gap-1 transition-colors ${filters.condition.length > 0 || activeDropdown === 'condition'
-                                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium'
-                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                    ? 'bg-blue-50 dark:bg-violet-900/30 border-blue-200 dark:border-violet-500 text-blue-700 dark:text-violet-300 font-medium'
+                                    : 'border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-white/40'
                                     }`}
                             >
                                 {getButtonLabel('condition', 'Condition')} <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'condition' ? 'rotate-180' : ''}`} />
@@ -137,8 +137,8 @@ const FilterBar: React.FC = () => {
                             <button
                                 onClick={() => toggleDropdown('printing')}
                                 className={`dropdown-button px-3 py-1.5 border rounded-full text-sm whitespace-nowrap flex items-center gap-1 transition-colors ${filters.printing.length > 0 || activeDropdown === 'printing'
-                                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium'
-                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                    ? 'bg-blue-50 dark:bg-violet-900/30 border-blue-200 dark:border-violet-500 text-blue-700 dark:text-violet-300 font-medium'
+                                    : 'border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-white/40'
                                     }`}
                             >
                                 {getButtonLabel('printing', 'Printing')} <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'printing' ? 'rotate-180' : ''}`} />
@@ -148,8 +148,8 @@ const FilterBar: React.FC = () => {
                             <button
                                 onClick={() => toggleDropdown('priceRange')}
                                 className={`dropdown-button px-3 py-1.5 border rounded-full text-sm whitespace-nowrap flex items-center gap-1 transition-colors ${filters.priceRange.length > 0 || activeDropdown === 'priceRange'
-                                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-medium'
-                                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                    ? 'bg-blue-50 dark:bg-violet-900/30 border-blue-200 dark:border-violet-500 text-blue-700 dark:text-violet-300 font-medium'
+                                    : 'border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-white/40'
                                     }`}
                             >
                                 {getButtonLabel('priceRange', 'Price')} <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'priceRange' ? 'rotate-180' : ''}`} />
@@ -166,13 +166,13 @@ const FilterBar: React.FC = () => {
                             )}
                         </div>
 
-                        <div className="hidden md:flex items-center gap-4 pl-4 border-l ml-4">
+                        <div className="hidden md:flex items-center gap-4 pl-4 border-l dark:border-white/10 ml-4">
                             <div className="flex items-center gap-2">
-                                <span className="text-xs text-gray-500 font-medium">Sort & View</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Sort & View</span>
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="text-sm font-bold text-gray-900 border-none focus:ring-0 cursor-pointer py-0 pl-2 pr-8 bg-transparent"
+                                    className="text-sm font-bold text-gray-900 dark:text-white border-none focus:ring-0 cursor-pointer py-0 pl-2 pr-8 bg-transparent"
                                 >
                                     <option value="relevance">Best Match</option>
                                     <option value="price-low">Price: Low to High</option>
@@ -180,25 +180,25 @@ const FilterBar: React.FC = () => {
                                     <option value="name">Name: A-Z</option>
                                 </select>
                             </div>
-                            <div className="flex border rounded-lg overflow-hidden gap-px bg-gray-200">
+                            <div className="flex border dark:border-white/10 rounded-lg overflow-hidden gap-px bg-gray-200 dark:bg-white/10">
                                 <button
                                     onClick={() => setViewMode('grid')}
-                                    className={`p-1.5 ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                                    className={`p-1.5 ${viewMode === 'grid' ? 'bg-blue-600 dark:bg-violet-600 text-white' : 'bg-white dark:bg-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
                                     title="Grid View"
                                 >
                                     <Grid size={18} />
                                 </button>
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`p-1.5 ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                                    className={`p-1.5 ${viewMode === 'list' ? 'bg-blue-600 dark:bg-violet-600 text-white' : 'bg-white dark:bg-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
                                     title="List View"
                                 >
                                     <AlignJustify size={18} />
                                 </button>
-                                <div className="w-px bg-gray-200"></div>
+                                <div className="w-px bg-gray-200 dark:bg-white/10"></div>
                                 <button
                                     onClick={() => setCompactView(!compactView)}
-                                    className={`p-1.5 ${compactView ? 'bg-blue-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                                    className={`p-1.5 ${compactView ? 'bg-blue-600 dark:bg-violet-600 text-white' : 'bg-white dark:bg-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
                                     title={compactView ? "Standard Size" : "Compact Size"}
                                 >
                                     {compactView ? <Maximize2 size={18} /> : <Minimize2 size={18} />}
@@ -209,38 +209,38 @@ const FilterBar: React.FC = () => {
 
                     {/* Active Dropdown Tray */}
                     {activeDropdown && (
-                        <div id="active-dropdown-tray" className="pt-4 pb-2 animate-in slide-in-from-top-2 fade-in duration-200 border-t mt-3 border-gray-100">
+                        <div id="active-dropdown-tray" className="pt-4 pb-2 animate-in slide-in-from-top-2 fade-in duration-200 border-t dark:border-white/10 mt-3 border-gray-100">
                             <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Select {activeDropdown === 'priceRange' ? 'Price Range' : activeDropdown} (Multi-select)
                                 </h3>
-                                <button onClick={() => setActiveDropdown(null)} className="text-gray-400 hover:text-gray-600 text-xs">
+                                <button onClick={() => setActiveDropdown(null)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-xs">
                                     Close
                                 </button>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {activeDropdown === 'game' && (
                                     <>
-                                        <button onClick={() => setFilters({ ...filters, game: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.game.length === 0 ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>Any Game</button>
-                                        {games.map(game => (<button key={game} onClick={() => toggleFilter('game', game)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('game', game) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>{game}</button>))}
+                                        <button onClick={() => setFilters({ ...filters, game: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.game.length === 0 ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>Any Game</button>
+                                        {games.map(game => (<button key={game} onClick={() => toggleFilter('game', game)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('game', game) ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>{game}</button>))}
                                     </>
                                 )}
                                 {activeDropdown === 'rarity' && (
                                     <>
-                                        <button onClick={() => setFilters({ ...filters, rarity: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.rarity.length === 0 ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>Any Rarity</button>
-                                        {rarities.map(rarity => (<button key={rarity} onClick={() => toggleFilter('rarity', rarity)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('rarity', rarity) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>{rarity}</button>))}
+                                        <button onClick={() => setFilters({ ...filters, rarity: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.rarity.length === 0 ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>Any Rarity</button>
+                                        {rarities.map(rarity => (<button key={rarity} onClick={() => toggleFilter('rarity', rarity)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('rarity', rarity) ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>{rarity}</button>))}
                                     </>
                                 )}
                                 {activeDropdown === 'condition' && (
                                     <>
-                                        <button onClick={() => setFilters({ ...filters, condition: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.condition.length === 0 ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>Any Condition</button>
-                                        {conditions.map(condition => (<button key={condition} onClick={() => toggleFilter('condition', condition)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('condition', condition) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>{condition}</button>))}
+                                        <button onClick={() => setFilters({ ...filters, condition: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.condition.length === 0 ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>Any Condition</button>
+                                        {conditions.map(condition => (<button key={condition} onClick={() => toggleFilter('condition', condition)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('condition', condition) ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>{condition}</button>))}
                                     </>
                                 )}
                                 {activeDropdown === 'printing' && (
                                     <>
-                                        <button onClick={() => setFilters({ ...filters, printing: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.printing.length === 0 ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>Any Printing</button>
-                                        {printings.map(printing => (<button key={printing} onClick={() => toggleFilter('printing', printing)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('printing', printing) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'}`}>{printing}</button>))}
+                                        <button onClick={() => setFilters({ ...filters, printing: [] })} className={`px-4 py-2 rounded-lg text-sm border transition-all ${filters.printing.length === 0 ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>Any Printing</button>
+                                        {printings.map(printing => (<button key={printing} onClick={() => toggleFilter('printing', printing)} className={`px-4 py-2 rounded-lg text-sm border transition-all ${isSelected('printing', printing) ? 'bg-blue-600 dark:bg-violet-600 text-white border-blue-600 dark:border-violet-600' : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-violet-500'}`}>{printing}</button>))}
                                     </>
                                 )}
                                 {activeDropdown === 'priceRange' && (
@@ -282,7 +282,7 @@ const FilterBar: React.FC = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-2 text-xs text-gray-500 border-b">
+            <div className="max-w-7xl mx-auto px-4 py-2 text-xs text-gray-500 dark:text-gray-500 border-b dark:border-white/10">
                 {resultsCount} results in Magic: The Gathering
             </div>
         </div>
