@@ -23,9 +23,100 @@ const Login: React.FC = () => {
         password: '',
         confirmPassword: '',
     });
+    const [signupErrors, setSignupErrors] = useState<Record<string, string>>({});
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [staySignedIn, setStaySignedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const validateSignupField = (
+        field: 'displayName' | 'email' | 'password' | 'confirmPassword',
+        formValues = signupForm
+    ): string => {
+        const value = formValues[field];
+        if (field === 'displayName') {
+            if (!value.trim()) return 'Full name is required';
+        }
+        if (field === 'email') {
+            if (!value.trim()) return 'Email address is required';
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value.trim())) return 'Please enter a valid email address';
+        }
+        if (field === 'password') {
+            if (!value) return 'Password is required';
+            if (value.length < 6) return 'Password must be at least 6 characters';
+        }
+        if (field === 'confirmPassword') {
+            if (!value) return 'Please confirm your password';
+            if (value !== formValues.password) return 'Passwords do not match';
+        }
+        return '';
+    };
+
+    const validateAllSignupFields = (formValues = signupForm) => {
+        const errors: Record<string, string> = {};
+        const fields: Array<'displayName' | 'email' | 'password' | 'confirmPassword'> = [
+            'displayName',
+            'email',
+            'password',
+            'confirmPassword',
+        ];
+
+        fields.forEach((field) => {
+            const error = validateSignupField(field, formValues);
+            if (error) {
+                errors[field] = error;
+            }
+        });
+
+        return errors;
+    };
+
+    const handleFieldFocus = (field: string) => {
+        setFocusedField(field);
+    };
+
+    const handleFieldBlur = (field: 'displayName' | 'email' | 'password' | 'confirmPassword') => {
+        setFocusedField(null);
+        if (hasAttemptedSubmit) {
+            const error = validateSignupField(field);
+            setSignupErrors((prev) => ({
+                ...prev,
+                [field]: error,
+            }));
+        }
+    };
+
+    const handleSignupChange = (
+        field: 'displayName' | 'email' | 'password' | 'confirmPassword',
+        value: string
+    ) => {
+        const updated = { ...signupForm, [field]: value };
+        setSignupForm(updated);
+
+        // If user already attempted submit, keep errors updated in background
+        if (hasAttemptedSubmit) {
+            const error = validateSignupField(field, updated);
+            setSignupErrors((prev) => ({
+                ...prev,
+                [field]: error,
+            }));
+
+            // Also re-validate confirmPassword if password changed
+            if (field === 'password' && updated.confirmPassword) {
+                const confirmError = validateSignupField('confirmPassword', updated);
+                setSignupErrors((prev) => ({
+                    ...prev,
+                    confirmPassword: confirmError,
+                }));
+            }
+        }
+    };
+
+    const shouldShowError = (field: string) => {
+        return Boolean(signupErrors[field] && focusedField !== field);
+    };
 
     const handleSignIn = async () => {
         if (!loginForm.email || !loginForm.password) {
@@ -78,18 +169,12 @@ const Login: React.FC = () => {
     };
 
     const handleSignUp = async () => {
-        if (!signupForm.email || !signupForm.password || !signupForm.displayName) {
-            showNotification('Please fill in all required fields', 'error');
-            return;
-        }
+        setHasAttemptedSubmit(true);
+        const errors = validateAllSignupFields();
+        setSignupErrors(errors);
 
-        if (signupForm.password !== signupForm.confirmPassword) {
-            showNotification('Passwords do not match', 'error');
-            return;
-        }
-
-        if (signupForm.password.length < 6) {
-            showNotification('Password must be at least 6 characters', 'error');
+        if (Object.keys(errors).length > 0) {
+            showNotification('Please fill in all fields correctly to continue.', 'error');
             return;
         }
 
@@ -129,6 +214,13 @@ const Login: React.FC = () => {
         }
     };
 
+    const switchTab = (toSignUp: boolean) => {
+        setIsSignUp(toSignUp);
+        setHasAttemptedSubmit(false);
+        setSignupErrors({});
+        setFocusedField(null);
+    };
+
     return (
         <div className="max-w-md mx-auto px-4 py-12">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
@@ -136,7 +228,7 @@ const Login: React.FC = () => {
                 <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
                     <button
                         type="button"
-                        onClick={() => setIsSignUp(false)}
+                        onClick={() => switchTab(false)}
                         className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
                             !isSignUp ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
                         }`}
@@ -145,7 +237,7 @@ const Login: React.FC = () => {
                     </button>
                     <button
                         type="button"
-                        onClick={() => setIsSignUp(true)}
+                        onClick={() => switchTab(true)}
                         className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
                             isSignUp ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
                         }`}
@@ -226,35 +318,72 @@ const Login: React.FC = () => {
                     /* Sign Up Form */
                     <div className="space-y-4 mb-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                Full Name <span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="text"
                                 value={signupForm.displayName}
-                                onChange={(e) => setSignupForm({ ...signupForm, displayName: e.target.value })}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                onFocus={() => handleFieldFocus('displayName')}
+                                onClick={() => handleFieldFocus('displayName')}
+                                onBlur={() => handleFieldBlur('displayName')}
+                                onChange={(e) => handleSignupChange('displayName', e.target.value)}
+                                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm ${
+                                    shouldShowError('displayName')
+                                        ? 'border-red-500 bg-red-50/20 text-gray-900 focus:ring-blue-500 focus:border-blue-500 focus:bg-white'
+                                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                }`}
                                 placeholder="e.g. Alex Walker"
                             />
+                            {shouldShowError('displayName') && (
+                                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
+                                    <span>•</span> {signupErrors.displayName}
+                                </p>
+                            )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                Email Address <span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="email"
                                 value={signupForm.email}
-                                onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                onFocus={() => handleFieldFocus('email')}
+                                onClick={() => handleFieldFocus('email')}
+                                onBlur={() => handleFieldBlur('email')}
+                                onChange={(e) => handleSignupChange('email', e.target.value)}
+                                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm ${
+                                    shouldShowError('email')
+                                        ? 'border-red-500 bg-red-50/20 text-gray-900 focus:ring-blue-500 focus:border-blue-500 focus:bg-white'
+                                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                }`}
                                 placeholder="alex@example.com"
                             />
+                            {shouldShowError('email') && (
+                                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
+                                    <span>•</span> {signupErrors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                Password <span className="text-red-500">*</span>
+                            </label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     value={signupForm.password}
-                                    onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                                    className="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    onFocus={() => handleFieldFocus('password')}
+                                    onClick={() => handleFieldFocus('password')}
+                                    onBlur={() => handleFieldBlur('password')}
+                                    onChange={(e) => handleSignupChange('password', e.target.value)}
+                                    className={`w-full pl-4 pr-10 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm ${
+                                        shouldShowError('password')
+                                            ? 'border-red-500 bg-red-50/20 text-gray-900 focus:ring-blue-500 focus:border-blue-500 focus:bg-white'
+                                            : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                    }`}
                                     placeholder="At least 6 characters"
                                 />
                                 <button
@@ -266,23 +395,42 @@ const Login: React.FC = () => {
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
+                            {shouldShowError('password') && (
+                                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
+                                    <span>•</span> {signupErrors.password}
+                                </p>
+                            )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                Confirm Password <span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 value={signupForm.confirmPassword}
-                                onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                onFocus={() => handleFieldFocus('confirmPassword')}
+                                onClick={() => handleFieldFocus('confirmPassword')}
+                                onBlur={() => handleFieldBlur('confirmPassword')}
+                                onChange={(e) => handleSignupChange('confirmPassword', e.target.value)}
+                                className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm ${
+                                    shouldShowError('confirmPassword')
+                                        ? 'border-red-500 bg-red-50/20 text-gray-900 focus:ring-blue-500 focus:border-blue-500 focus:bg-white'
+                                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                                }`}
                                 placeholder="Re-enter password"
                             />
+                            {shouldShowError('confirmPassword') && (
+                                <p className="text-red-600 text-xs mt-1.5 font-medium flex items-center gap-1">
+                                    <span>•</span> {signupErrors.confirmPassword}
+                                </p>
+                            )}
                         </div>
 
                         <div className="bg-blue-50 rounded-xl p-3 border border-blue-100 flex items-start gap-2.5 text-xs text-blue-800">
                             <Sparkles size={16} className="text-blue-600 shrink-0 mt-0.5" />
                             <span>
-                                After signing up, you will be guided through a quick 60-second wizard to personalize your games and shopping mode.
+                                After signing up, you will be guided through a quick 60-second wizard to personalize your games and shopping experience.
                             </span>
                         </div>
 
@@ -303,7 +451,7 @@ const Login: React.FC = () => {
                             Don't have an account?{' '}
                             <button
                                 type="button"
-                                onClick={() => setIsSignUp(true)}
+                                onClick={() => switchTab(true)}
                                 className="text-blue-600 font-semibold hover:underline cursor-pointer"
                             >
                                 Sign up
@@ -314,7 +462,7 @@ const Login: React.FC = () => {
                             Already have an account?{' '}
                             <button
                                 type="button"
-                                onClick={() => setIsSignUp(false)}
+                                onClick={() => switchTab(false)}
                                 className="text-blue-600 font-semibold hover:underline cursor-pointer"
                             >
                                 Sign in
