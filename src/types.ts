@@ -61,6 +61,19 @@ export interface StoreEvent {
 }
 
 
+export type ShoppingMode =
+    | 'local_only'
+    | 'mix'
+    | 'online_only'
+    | 'cheapest';
+
+export interface UserPreferences {
+    interestedGames: string[];
+    shoppingMode: ShoppingMode | null;
+    emailNewsletter: boolean;
+    onboardingCompleted: boolean;
+}
+
 export interface UserProfile {
     id: number;
     username: string;
@@ -77,4 +90,5 @@ export interface UserProfile {
     longitude: number | null;
     locationAccuracyMeters: number | null;
     locationUpdatedAt: string | null;
+    preferences?: UserPreferences;
 }

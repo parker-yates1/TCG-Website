@@ -16,11 +16,13 @@ import About from './pages/About'
 import MassEntry from './pages/MassEntry'
 import Stores from './pages/Stores'
 import Events from './pages/Events'
+import Welcome from './pages/Welcome'
 import { NotificationProvider } from './context/NotificationContext'
 import { AuthProvider } from './context/AuthContext'
 import { ShopProvider } from './context/ShopContext'
 import { ProductProvider } from './context/ProductContext'
 import { UserProvider } from './context/UserContext'
+import { OnboardingProvider } from './context/OnboardingContext'
 
 function App() {
     return (
@@ -30,6 +32,7 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/welcome" element={<Welcome />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/login" element={<Login />} />
@@ -52,13 +55,15 @@ createRoot(document.getElementById('root')!).render(
         <NotificationProvider>
             <AuthProvider>
                 <UserProvider>
-                    <ProductProvider>
-                        <ShopProvider>
-                            <BrowserRouter>
-                                <App />
-                            </BrowserRouter>
-                        </ShopProvider>
-                    </ProductProvider>
+                    <OnboardingProvider>
+                        <ProductProvider>
+                            <ShopProvider>
+                                <BrowserRouter>
+                                    <App />
+                                </BrowserRouter>
+                            </ShopProvider>
+                        </ProductProvider>
+                    </OnboardingProvider>
                 </UserProvider>
             </AuthProvider>
         </NotificationProvider>
