@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, ShoppingCart, User, Heart, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ShoppingCart, User, Heart, Menu, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../context/ProductContext';
 import { useShop } from '../context/ShopContext';
@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
 import { useCardSearch } from '../hooks/useCardSearch';
 import SearchOverlay from './SearchOverlay';
+import { useTheme } from '../context/ThemeContext';
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Header: React.FC = () => {
     const { cart, wishlist } = useShop();
     const { isLoggedIn } = useAuth();
     const { user } = useUser();
+    const { isDark, toggleTheme } = useTheme();
     const signedIn = isLoggedIn || !!user;
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const scrollRef = useRef<HTMLElement>(null);
@@ -43,12 +45,12 @@ const Header: React.FC = () => {
 
     return (
         <header className="sticky top-0 z-50 shadow-sm flex flex-col">
-            <div className="bg-gradient-to-r from-blue-900 to-purple-900 text-white">
+            <div className="bg-gradient-to-r from-blue-900 to-purple-900 dark:from-[#0f172a] dark:to-[#1e1040] text-white transition-colors duration-300" style={isDark ? { backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.1)' } : {}}>
                 <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-8">
                             <h1
-                                className="text-2xl font-bold cursor-pointer hover:text-blue-300 transition"
+                                className="text-2xl font-bold cursor-pointer hover:text-blue-300 dark:hover:text-violet-300 transition"
                                 onClick={() => navigate('/')}
                             >
                                 TCG Marketplace
@@ -60,9 +62,9 @@ const Header: React.FC = () => {
                                     value={query}
                                     onChange={handleInputChange}
                                     onFocus={handleFocus}
-                                    className={`w-full pl-4 pr-10 py-2 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow ${isOpen ? 'relative z-50' : ''}`}
+                                    className={`w-full pl-4 pr-10 py-2 rounded-full bg-white dark:bg-white/10 dark:text-white dark:placeholder-white/50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-violet-500 transition-shadow ${isOpen ? 'relative z-50' : ''}`}
                                 />
-                                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-50" />
+                                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/50 z-50" />
                                 {isOpen && (
                                     <SearchOverlay
                                         query={query}
@@ -76,9 +78,23 @@ const Header: React.FC = () => {
                         </div>
 
                         <div className="flex items-center gap-2 md:gap-4">
+                            {/* Theme Toggle */}
+                            <button
+                                id="theme-toggle"
+                                onClick={toggleTheme}
+                                className="p-2 hover:bg-white/10 rounded-lg transition"
+                                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                            >
+                                {isDark ? (
+                                    <Sun className="w-5 h-5" />
+                                ) : (
+                                    <Moon className="w-5 h-5" />
+                                )}
+                            </button>
+
                             <button
                                 onClick={() => navigate(signedIn ? '/account' : '/login')}
-                                className="flex items-center gap-1 text-sm font-medium hover:text-blue-300 transition cursor-pointer"
+                                className="flex items-center gap-1 text-sm font-medium hover:text-blue-300 dark:hover:text-violet-300 transition cursor-pointer"
                             >
                                 <User className="w-5 h-5" />
                                 <span className="hidden sm:inline">{signedIn ? 'Account' : 'Sign In'}</span>
@@ -120,7 +136,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Secondary Navigation */}
-            <div className="bg-black text-white py-2 hidden md:block border-t border-gray-800">
+            <div className="bg-black dark:bg-[#0a0f1e] text-white py-2 hidden md:block border-t border-gray-800 dark:border-white/10 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <div className="flex-1 flex items-center mr-8 min-w-0">
                         <button 
@@ -171,7 +187,7 @@ const Header: React.FC = () => {
 
             {/* Mobile Menu */}
             {showMobileMenu && (
-                <div className="bg-gray-900 text-white p-4 md:hidden">
+                <div className="bg-gray-900 dark:bg-[#0f172a] dark:border-t dark:border-white/10 text-white p-4 md:hidden">
                     <div className="mb-4">
                         <input
                             type="text"

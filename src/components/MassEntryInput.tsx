@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 
 interface MassEntryInputProps {
     value: string;
@@ -40,7 +40,7 @@ const MassEntryInput: React.FC<MassEntryInputProps> = ({
             {/* Backdrop for highlights */}
             <div
                 ref={backdropRef}
-                className={`absolute inset-0 whitespace-pre-wrap break-words rounded-lg bg-white pointer-events-none border-transparent ${sharedStyles}`}
+                className={`absolute inset-0 whitespace-pre-wrap break-words rounded-lg bg-white dark:bg-[#1e293b] pointer-events-none border-transparent ${sharedStyles}`}
                 aria-hidden="true"
                 style={{
                     // Text color transparent so we don't see double text
@@ -54,7 +54,7 @@ const MassEntryInput: React.FC<MassEntryInputProps> = ({
                     return (
                         <div
                             key={i}
-                            className={`relative w-full ${hasError ? 'bg-red-100/70' : ''}`}
+                            className={`relative w-full ${hasError ? 'bg-red-100/70 dark:bg-red-900/40' : ''}`}
                         >
                             {/* Render text to ensure height matching. 
                                 Use non-breaking space for empty lines to maintain line height. 
@@ -64,9 +64,6 @@ const MassEntryInput: React.FC<MassEntryInputProps> = ({
                             {/* Optional: Error Marker/Tooltip */}
                             {hasError && (
                                 <span className="absolute right-0 top-0 bottom-0 flex items-center pr-2">
-                                    {/* Could add an icon here, but might overlap text. 
-                                         Just background is safer for now. 
-                                     */}
                                 </span>
                             )}
                         </div>
@@ -88,7 +85,7 @@ const MassEntryInput: React.FC<MassEntryInputProps> = ({
                 onScroll={handleScroll}
                 placeholder={placeholder}
                 rows={15}
-                className={`relative z-10 bg-transparent text-gray-900 resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded-lg border border-gray-300 outline-none whitespace-pre-wrap break-words ${sharedStyles}`}
+                className={`relative z-10 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/40 resize-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-violet-500 focus:border-blue-500 dark:focus:border-violet-500 rounded-lg border border-gray-300 dark:border-white/10 outline-none whitespace-pre-wrap break-words ${sharedStyles}`}
                 spellCheck={false}
             />
         </div>

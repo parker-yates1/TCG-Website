@@ -26,7 +26,7 @@ const CardGrid: React.FC = () => {
         return (
             <div className="text-center py-20">
                 <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">No cards found</h3>
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">No cards found</h3>
                 <p className="text-gray-600 mb-4">Try adjusting your filters or search query</p>
                 <button
                     onClick={() => {
@@ -48,10 +48,10 @@ const CardGrid: React.FC = () => {
                     <div
                         key={card.id}
                         onClick={() => setSelectedCard(card)}
-                        className={`bg-white rounded-lg border border-gray-100 hover:border-blue-300 shadow-sm flex items-center transition-all hover:shadow-md cursor-pointer group ${compactView ? 'p-2 gap-2' : 'p-4 gap-4'}`}
+                        className={`bg-white dark:bg-[#1e293b] dark:border-white/10 rounded-lg border border-gray-100 hover:border-blue-300 dark:hover:border-violet-500 shadow-sm flex items-center transition-all hover:shadow-md cursor-pointer group ${compactView ? 'p-2 gap-2' : 'p-4 gap-4'}`}
                     >
                         {/* Thumbnail */}
-                        <div className={`bg-gray-100 rounded overflow-hidden flex-shrink-0 ${compactView ? 'w-10 h-14' : 'w-16 h-20'}`}>
+                        <div className={`bg-gray-100 dark:bg-white/5 rounded overflow-hidden flex-shrink-0 ${compactView ? 'w-10 h-14' : 'w-16 h-20'}`}>
                             <img
                                 src={card.image}
                                 alt={card.name}
@@ -62,11 +62,11 @@ const CardGrid: React.FC = () => {
                         {/* Info */}
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{card.game}</span>
-                                <span className="bg-gray-100 text-gray-600 text-[10px] px-1.5 py-0.5 rounded border border-gray-200 uppercase font-medium">{card.condition}</span>
+                                <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{card.game}</span>
+                                <span className="bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 text-[10px] px-1.5 py-0.5 rounded border border-gray-200 dark:border-white/10 uppercase font-medium">{card.condition}</span>
                             </div>
-                            <h3 className={`font-heading font-bold text-gray-900 truncate ${compactView ? 'text-sm' : 'text-base'}`} title={card.name}>{card.name}</h3>
-                            <div className="text-xs text-gray-500 mt-1">{card.rarity}</div>
+                            <h3 className={`font-heading font-bold text-gray-900 dark:text-white truncate ${compactView ? 'text-sm' : 'text-base'}`} title={card.name}>{card.name}</h3>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{card.rarity}</div>
                         </div>
 
                         {/* Price & Stock */}
@@ -76,10 +76,10 @@ const CardGrid: React.FC = () => {
                         </div>
 
                         {/* Actions */}
-                        <div className={`flex items-center gap-2 pl-4 border-l border-gray-100 ml-4 ${compactView ? 'hidden sm:flex' : 'flex'}`} onClick={(e) => e.stopPropagation()}>
+                        <div className={`flex items-center gap-2 pl-4 border-l border-gray-100 dark:border-white/10 ml-4 ${compactView ? 'hidden sm:flex' : 'flex'}`} onClick={(e) => e.stopPropagation()}>
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleWishlist(card); }}
-                                className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${wishlist.find(item => item.id === card.id) ? 'text-red-500' : 'text-gray-400'}`}
+                                className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors ${wishlist.find(item => item.id === card.id) ? 'text-red-500' : 'text-gray-400'}`}
                             >
                                 <Heart className={`w-5 h-5 ${wishlist.find(item => item.id === card.id) ? 'fill-current' : ''}`} />
                             </button>
@@ -98,7 +98,7 @@ const CardGrid: React.FC = () => {
             {cards.map(card => (
                 <div
                     key={card.id}
-                    className="group bg-gradient-to-b from-gray-100 to-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col overflow-hidden relative border border-gray-200/80"
+                    className="group bg-gradient-to-b from-gray-100 to-gray-200 dark:from-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col overflow-hidden relative border border-gray-200/80 dark:border-white/10"
                     onMouseEnter={() => setHoveredCard(card.id)}
                     onMouseLeave={() => {
                         setHoveredCard(null);
@@ -130,22 +130,22 @@ const CardGrid: React.FC = () => {
                     {/* Content Area (Trigger for expanding hover panel) */}
                     <div
                         onMouseEnter={() => setHoveredPanelCardId(card.id)}
-                        className={`relative z-10 bg-white/95 backdrop-blur-sm group-hover:bg-white transition-all duration-300 ${compactView ? 'p-2' : 'p-4'} flex flex-col flex-1 gap-1`}
+                        className={`relative z-10 bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur-sm group-hover:bg-white dark:group-hover:bg-[#1e293b] transition-all duration-300 ${compactView ? 'p-2' : 'p-4'} flex flex-col flex-1 gap-1`}
                     >
                         <div>
-                            <p className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase mb-0.5">{card.game}</p>
-                            <h3 className={`font-heading font-bold text-gray-900 leading-tight line-clamp-2 ${compactView ? 'text-xs min-h-[2rem]' : 'text-sm min-h-[2.5rem]'}`} title={card.name}>
+                            <p className="text-[10px] font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-0.5">{card.game}</p>
+                            <h3 className={`font-heading font-bold text-gray-900 dark:text-white leading-tight line-clamp-2 ${compactView ? 'text-xs min-h-[2rem]' : 'text-sm min-h-[2.5rem]'}`} title={card.name}>
                                 {card.name}
                             </h3>
                         </div>
 
                         <div className="flex items-center gap-1 mt-0.5">
-                            <span className="text-[10px] px-1.5 py-0.5 bg-white text-gray-600 rounded-full font-medium border border-gray-200 shadow-sm">
+                            <span className="text-[10px] px-1.5 py-0.5 bg-white dark:bg-white/10 text-gray-600 dark:text-gray-300 rounded-full font-medium border border-gray-200 dark:border-white/10 shadow-sm">
                                 {card.condition}
                             </span>
                         </div>
 
-                        <div className={`mt-auto pt-2 flex items-end justify-between border-t border-gray-300 ${compactView ? 'pt-1.5' : 'pt-3'}`}>
+                        <div className={`mt-auto pt-2 flex items-end justify-between border-t border-gray-300 dark:border-white/10 ${compactView ? 'pt-1.5' : 'pt-3'}`}>
                             <div>
                                 <div className="text-[10px] text-gray-400 mb-0">Price</div>
                                 <span className={`${compactView ? 'text-sm' : 'text-xl'} font-bold text-blue-600 font-heading`}>

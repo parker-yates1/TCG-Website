@@ -9,16 +9,16 @@ const Wishlist: React.FC = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-8">My Wishlist</h2>
+            <h2 className="text-3xl font-bold mb-8 dark:text-white">My Wishlist</h2>
 
             {wishlist.length === 0 ? (
                 <div className="text-center py-20">
-                    <Heart className="w-20 h-20 mx-auto text-gray-300 mb-4" />
-                    <h3 className="text-2xl font-bold text-gray-800 mb-2">Your wishlist is empty</h3>
-                    <p className="text-gray-600 mb-6">Save your favorite cards here for later!</p>
+                    <Heart className="w-20 h-20 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">Your wishlist is empty</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">Save your favorite cards here for later!</p>
                     <button
                         onClick={() => navigate('/')}
-                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                        className="px-6 py-3 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                     >
                         Browse Cards
                     </button>
@@ -26,7 +26,7 @@ const Wishlist: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {wishlist.map(card => (
-                        <div key={card.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div key={card.id} className="bg-white dark:bg-[#1e293b] dark:border dark:border-white/10 rounded-lg shadow-md overflow-hidden transition-colors duration-300">
                             <div className="relative overflow-hidden h-48">
                                 <img
                                     src={card.image}
@@ -35,29 +35,29 @@ const Wishlist: React.FC = () => {
                                 />
                                 <button
                                     onClick={() => toggleWishlist(card)}
-                                    className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+                                    className="absolute top-2 right-2 p-2 bg-white dark:bg-[#1e293b] rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-white/10 transition"
                                 >
                                     <X className="w-4 h-4 text-red-500" />
                                 </button>
                             </div>
 
                             <div className="p-4">
-                                <h3 className="font-bold text-lg mb-1">{card.name}</h3>
-                                <p className="text-sm text-gray-600 mb-2">{card.game}</p>
+                                <h3 className="font-bold text-lg mb-1 dark:text-white">{card.name}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{card.game}</p>
 
                                 <div className="flex items-center gap-2 mb-3">
-                                    <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                                    <span className="text-xs bg-purple-100 dark:bg-violet-900/40 text-purple-800 dark:text-violet-300 px-2 py-1 rounded">
                                         {card.rarity}
                                     </span>
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                    <span className="text-2xl font-bold text-blue-600">
+                                    <span className="text-2xl font-bold text-blue-600 dark:text-violet-400">
                                         ${card.price.toLocaleString()}
                                     </span>
                                     <button
                                         onClick={() => addToCart(card)}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                                        className="px-4 py-2 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                                     >
                                         Add to Cart
                                     </button>
