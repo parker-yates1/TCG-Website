@@ -57,7 +57,9 @@ const Header: React.FC = () => {
                             </h1>
                             <div className="flex-1 max-w-2xl relative hidden md:block">
                                 <input
-                                    type="text"
+                                    type="search"
+                                    autoComplete="off"
+                                    name="card-search"
                                     placeholder="Search cards..."
                                     value={query}
                                     onChange={handleInputChange}
@@ -190,7 +192,9 @@ const Header: React.FC = () => {
                 <div className="bg-gray-900 dark:bg-[#0f172a] dark:border-t dark:border-white/10 text-white p-4 md:hidden">
                     <div className="mb-4">
                         <input
-                            type="text"
+                            type="search"
+                            autoComplete="off"
+                            name="card-search-mobile"
                             placeholder="Search cards..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}

@@ -253,11 +253,18 @@ const Login: React.FC = () => {
                 {/* Form fields */}
                 {!isSignUp ? (
                     /* Sign In Form */
-                    <div className="space-y-4 mb-6">
+                    <form
+                        autoComplete="on"
+                        onSubmit={(e) => { e.preventDefault(); handleSignIn(); }}
+                        className="space-y-4 mb-6"
+                    >
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
+                            <label htmlFor="signin-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
                             <input
+                                id="signin-email"
                                 type="email"
+                                name="email"
+                                autoComplete="email"
                                 value={loginForm.email}
                                 onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-violet-500 text-sm"
@@ -266,10 +273,13 @@ const Login: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
+                            <label htmlFor="signin-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
                             <div className="relative">
                                 <input
+                                    id="signin-password"
                                     type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    autoComplete="current-password"
                                     value={loginForm.password}
                                     onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                                     className="w-full pl-4 pr-10 py-2.5 border border-gray-300 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-violet-500 text-sm"
@@ -299,23 +309,29 @@ const Login: React.FC = () => {
                         </div>
 
                         <button
-                            type="button"
-                            onClick={handleSignIn}
+                            type="submit"
                             disabled={isLoading}
                             className="w-full py-3 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 hover:bg-blue-700 dark:hover:from-violet-700 dark:hover:to-blue-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition cursor-pointer text-sm"
                         >
                             {isLoading ? 'Signing In...' : 'Sign In'}
                         </button>
-                    </div>
+                    </form>
                 ) : (
                     /* Sign Up Form */
-                    <div className="space-y-4 mb-6">
+                    <form
+                        autoComplete="on"
+                        onSubmit={(e) => { e.preventDefault(); handleSignUp(); }}
+                        className="space-y-4 mb-6"
+                    >
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                 Full Name <span className="text-red-500">*</span>
                             </label>
                             <input
+                                id="signup-name"
                                 type="text"
+                                name="name"
+                                autoComplete="name"
                                 value={signupForm.displayName}
                                 onFocus={() => handleFieldFocus('displayName')}
                                 onClick={() => handleFieldFocus('displayName')}
@@ -336,11 +352,14 @@ const Login: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                 Email Address <span className="text-red-500">*</span>
                             </label>
                             <input
+                                id="signup-email"
                                 type="email"
+                                name="email"
+                                autoComplete="email"
                                 value={signupForm.email}
                                 onFocus={() => handleFieldFocus('email')}
                                 onClick={() => handleFieldFocus('email')}
@@ -361,12 +380,15 @@ const Login: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                 Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <input
+                                    id="signup-password"
                                     type={showPassword ? 'text' : 'password'}
+                                    name="new-password"
+                                    autoComplete="new-password"
                                     value={signupForm.password}
                                     onFocus={() => handleFieldFocus('password')}
                                     onClick={() => handleFieldFocus('password')}
@@ -396,11 +418,14 @@ const Login: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            <label htmlFor="signup-confirm-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                 Confirm Password <span className="text-red-500">*</span>
                             </label>
                             <input
+                                id="signup-confirm-password"
                                 type={showPassword ? 'text' : 'password'}
+                                name="confirm-password"
+                                autoComplete="new-password"
                                 value={signupForm.confirmPassword}
                                 onFocus={() => handleFieldFocus('confirmPassword')}
                                 onClick={() => handleFieldFocus('confirmPassword')}
@@ -428,14 +453,13 @@ const Login: React.FC = () => {
                         </div>
 
                         <button
-                            type="button"
-                            onClick={handleSignUp}
+                            type="submit"
                             disabled={isLoading}
                             className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-violet-600 dark:to-blue-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition cursor-pointer text-sm"
                         >
                             {isLoading ? 'Creating Account...' : 'Create Account & Continue'}
                         </button>
-                    </div>
+                    </form>
                 )}
 
                 <div className="text-center text-sm text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-white/10 pt-4">

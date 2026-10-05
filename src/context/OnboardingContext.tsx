@@ -16,6 +16,11 @@ const DEFAULT_PREFERENCES: UserPreferences = {
     shoppingMode: null,
     emailNewsletter: true,
     onboardingCompleted: false,
+    zipCode: '',
+    useBrowserLocation: false,
+    latitude: null,
+    longitude: null,
+    locationCityState: '',
 };
 
 const STORAGE_KEY = 'tcg_user_preferences';
@@ -74,6 +79,9 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
         if (user) {
             setUser({
                 ...user,
+                latitude: newPrefs.latitude !== undefined ? newPrefs.latitude : user.latitude,
+                longitude: newPrefs.longitude !== undefined ? newPrefs.longitude : user.longitude,
+                locationSharingEnabled: newPrefs.useBrowserLocation !== undefined ? newPrefs.useBrowserLocation : user.locationSharingEnabled,
                 preferences: updated,
             });
         }

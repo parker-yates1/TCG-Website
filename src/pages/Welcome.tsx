@@ -5,6 +5,7 @@ import { useNotification } from '../context/NotificationContext';
 import { useUser } from '../context/UserContext';
 import GameSelector from '../components/preferences/GameSelector';
 import ShoppingModeSelector from '../components/preferences/ShoppingModeSelector';
+import LocationSelector from '../components/preferences/LocationSelector';
 import EmailPreferenceToggle from '../components/preferences/EmailPreferenceToggle';
 import { ShoppingMode } from '../types';
 import {
@@ -12,6 +13,7 @@ import {
     ArrowRight,
     ArrowLeft,
     CheckCircle2,
+    MapPin,
 } from 'lucide-react';
 
 const Welcome: React.FC = () => {
@@ -29,13 +31,32 @@ const Welcome: React.FC = () => {
     const [shoppingMode, setShoppingMode] = useState<ShoppingMode | null>(
         preferences.shoppingMode || 'mix'
     );
+    const [zipCode, setZipCode] = useState<string>(preferences.zipCode || '');
+
+    console.log('this is the value of zipCode', preferences.zipCode)
+    const [useBrowserLocation, setUseBrowserLocation] = useState<boolean>(
+        preferences.useBrowserLocation || false
+    );
+    const [latitude, setLatitude] = useState<number | null>(preferences.latitude ?? null);
+    const [longitude, setLongitude] = useState<number | null>(preferences.longitude ?? null);
+    const [locationCityState, setLocationCityState] = useState<string>(
+        preferences.locationCityState || ''
+    );
     const [emailNewsletter, setEmailNewsletter] = useState<boolean>(
         preferences.emailNewsletter ?? true
     );
     const [isSaving, setIsSaving] = useState(false);
 
-    const totalSteps = 4;
     const displayName = user?.displayName || user?.username || 'Collector';
+    const isLocationEnabled = shoppingMode !== 'online_only';
+    const totalSteps = isLocationEnabled ? 5 : 4;
+
+    const getDisplayStepNumber = () => {
+        if (!isLocationEnabled && currentStep === 5) {
+            return 4;
+        }
+        return currentStep;
+    };
 
     const handleSkip = () => {
         skipOnboarding();
@@ -49,6 +70,11 @@ const Welcome: React.FC = () => {
             await savePreferences({
                 interestedGames: selectedGames,
                 shoppingMode,
+                zipCode,
+                useBrowserLocation,
+                latitude,
+                longitude,
+                locationCityState,
                 emailNewsletter,
             });
             showNotification('Preferences saved! Welcome to TCG Marketplace.');
@@ -62,6 +88,20 @@ const Welcome: React.FC = () => {
         }
     };
 
+    const handleLocationChange = (data: {
+        zipCode: string;
+        useBrowserLocation: boolean;
+        latitude?: number | null;
+        longitude?: number | null;
+        locationCityState?: string;
+    }) => {
+        setZipCode(data.zipCode);
+        setUseBrowserLocation(data.useBrowserLocation);
+        setLatitude(data.latitude ?? null);
+        setLongitude(data.longitude ?? null);
+        setLocationCityState(data.locationCityState || '');
+    };
+
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gradient-to-b from-blue-50/50 via-gray-50 to-white dark:from-[#0f172a] dark:via-[#0f172a] dark:to-[#0a0f1e] flex flex-col justify-between py-8 px-4 transition-colors duration-300">
             <div className="max-w-3xl mx-auto w-full">
@@ -72,7 +112,7 @@ const Welcome: React.FC = () => {
                             Setup & Personalization
                         </span>
                         <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                            Step {currentStep} of {totalSteps}
+                            Step {getDisplayStepNumber()} of {totalSteps}
                         </h2>
                     </div>
 
@@ -89,7 +129,7 @@ const Welcome: React.FC = () => {
                 <div className="w-full bg-gray-200 dark:bg-white/10 h-1.5 rounded-full overflow-hidden mb-8">
                     <div
                         className="bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 h-full transition-all duration-300 ease-out"
-                        style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+                        style={{ width: `${(getDisplayStepNumber() / totalSteps) * 100}%` }}
                     />
                 </div>
 
@@ -134,9 +174,9 @@ const Welcome: React.FC = () => {
                                     <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-violet-900/40 text-blue-700 dark:text-violet-300 flex items-center justify-center font-bold text-sm mb-3">
                                         3
                                     </div>
-                                    <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-1">Deal Alerts</h4>
+                                    <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-1">Local Area & Alerts</h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        Get notified about price drops and tournaments.
+                                        Detect local stores and get price drop updates.
                                     </p>
                                 </div>
                             </div>
@@ -216,7 +256,14 @@ const Welcome: React.FC = () => {
                                 </button>
                                 <button
                                     type="button"
-                                    onClick={() => setCurrentStep(4)}
+                                    onClick={() => {
+                                        if (shoppingMode === 'online_only') {
+                                            // Skip location step if online exclusive
+                                            setCurrentStep(5);
+                                        } else {
+                                            setCurrentStep(4);
+                                        }
+                                    }}
                                     disabled={!shoppingMode}
                                     className="px-6 py-2.5 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl shadow transition flex items-center gap-1.5 cursor-pointer text-sm"
                                 >
@@ -226,15 +273,70 @@ const Welcome: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Step 4: Contact / Finish */}
+                    {/* Step 4: Location & Local Area (Enabled when shoppingMode !== 'online_only', with option to skip) */}
                     {currentStep === 4 && (
+                        <div className="space-y-6">
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        Set Your Location
+                                    </h2>
+                                    <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-100 dark:bg-violet-900/40 text-blue-800 dark:text-violet-300">
+                                        Optional
+                                    </span>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Allow your browser to detect your position, enter a 5-digit ZIP code, or skip this step to do it later.
+                                </p>
+                            </div>
+
+                            <LocationSelector
+                                zipCode={zipCode}
+                                useBrowserLocation={useBrowserLocation}
+                                latitude={latitude}
+                                longitude={longitude}
+                                locationCityState={locationCityState}
+                                shoppingMode={shoppingMode}
+                                onChange={handleLocationChange}
+                            />
+
+                            <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/10">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentStep(3)}
+                                    className="px-5 py-2.5 border border-gray-300 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition flex items-center gap-1.5 cursor-pointer text-sm"
+                                >
+                                    <ArrowLeft size={16} /> Back
+                                </button>
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentStep(5)}
+                                        className="px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition cursor-pointer"
+                                    >
+                                        Skip this step
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentStep(5)}
+                                        className="px-6 py-2.5 bg-blue-600 dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition flex items-center gap-1.5 cursor-pointer text-sm"
+                                    >
+                                        Continue <ArrowRight size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 5: Contact & Final Review */}
+                    {currentStep === 5 && (
                         <div className="space-y-6">
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                                     Stay connected & final summary
                                 </h2>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    Almost done! Review your selections and configure email alerts.
+                                    Almost done! Review your personalized preferences and configure email alerts.
                                 </p>
                             </div>
 
@@ -262,6 +364,22 @@ const Welcome: React.FC = () => {
                                         {shoppingMode ? shoppingMode.replace('_', ' ') : 'Not selected'}
                                     </span>
                                 </div>
+
+                                {isLocationEnabled && (
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm border-b border-gray-200 dark:border-white/10 pb-2">
+                                        <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                            <MapPin size={14} className="text-blue-600 dark:text-violet-400" /> Location / Area:
+                                        </span>
+                                        <span className="font-semibold text-gray-900 dark:text-white">
+                                            {useBrowserLocation && latitude !== null
+                                                ? (locationCityState || `GPS (Lat: ${latitude.toFixed(2)}, Lon: ${longitude?.toFixed(2)})`)
+                                                : zipCode
+                                                    ? `ZIP Code: ${zipCode}`
+                                                    : 'Skipped (Can be set in Account)'}
+                                        </span>
+                                    </div>
+                                )}
+
                                 <div className="flex items-center justify-between text-sm">
                                     <span className="text-gray-500 dark:text-gray-400">Email Notifications:</span>
                                     <span className={`font-semibold ${emailNewsletter ? 'text-green-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`}>
@@ -273,7 +391,13 @@ const Welcome: React.FC = () => {
                             <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/10">
                                 <button
                                     type="button"
-                                    onClick={() => setCurrentStep(3)}
+                                    onClick={() => {
+                                        if (shoppingMode === 'online_only') {
+                                            setCurrentStep(3);
+                                        } else {
+                                            setCurrentStep(4);
+                                        }
+                                    }}
                                     className="px-5 py-2.5 border border-gray-300 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition flex items-center gap-1.5 cursor-pointer text-sm"
                                 >
                                     <ArrowLeft size={16} /> Back

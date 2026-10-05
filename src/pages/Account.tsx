@@ -6,7 +6,6 @@ import {
     CreditCard,
     Sliders,
     Save,
-    Sparkles,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -16,6 +15,7 @@ import { useNotification } from '../context/NotificationContext';
 import { useOnboarding } from '../context/OnboardingContext';
 import GameSelector from '../components/preferences/GameSelector';
 import ShoppingModeSelector from '../components/preferences/ShoppingModeSelector';
+import LocationSelector from '../components/preferences/LocationSelector';
 import EmailPreferenceToggle from '../components/preferences/EmailPreferenceToggle';
 import { ShoppingMode } from '../types';
 
@@ -34,6 +34,15 @@ const Account: React.FC = () => {
     const [shoppingMode, setShoppingMode] = useState<ShoppingMode | null>(
         preferences.shoppingMode || 'mix'
     );
+    const [zipCode, setZipCode] = useState<string>(preferences.zipCode || '');
+    const [useBrowserLocation, setUseBrowserLocation] = useState<boolean>(
+        preferences.useBrowserLocation || false
+    );
+    const [latitude, setLatitude] = useState<number | null>(preferences.latitude ?? null);
+    const [longitude, setLongitude] = useState<number | null>(preferences.longitude ?? null);
+    const [locationCityState, setLocationCityState] = useState<string>(
+        preferences.locationCityState || ''
+    );
     const [emailNewsletter, setEmailNewsletter] = useState<boolean>(
         preferences.emailNewsletter ?? true
     );
@@ -49,6 +58,11 @@ const Account: React.FC = () => {
             await savePreferences({
                 interestedGames: selectedGames,
                 shoppingMode,
+                zipCode,
+                useBrowserLocation,
+                latitude,
+                longitude,
+                locationCityState,
                 emailNewsletter,
             });
             showNotification('Preferences successfully updated!');
@@ -60,6 +74,20 @@ const Account: React.FC = () => {
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleLocationChange = (data: {
+        zipCode: string;
+        useBrowserLocation: boolean;
+        latitude?: number | null;
+        longitude?: number | null;
+        locationCityState?: string;
+    }) => {
+        setZipCode(data.zipCode);
+        setUseBrowserLocation(data.useBrowserLocation);
+        setLatitude(data.latitude ?? null);
+        setLongitude(data.longitude ?? null);
+        setLocationCityState(data.locationCityState || '');
     };
 
     return (
@@ -88,14 +116,7 @@ const Account: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={() => navigate('/welcome')}
-                            className="px-4 py-2 bg-blue-50 dark:bg-white/5 hover:bg-blue-100 dark:hover:bg-white/10 text-blue-700 dark:text-violet-300 font-semibold rounded-xl text-sm transition flex items-center gap-1.5 cursor-pointer"
-                        >
-                            <Sparkles size={16} /> Re-run Setup Wizard
-                        </button>
+                    <div>
                         <button
                             type="button"
                             onClick={() => {
@@ -122,7 +143,7 @@ const Account: React.FC = () => {
                         <div>
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white">Marketplace & Game Preferences</h3>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Customize which games appear in your feeds and how shopping results are prioritized.
+                                Customize which games appear in your feeds, local pickup area, and how shopping results are prioritized.
                             </p>
                         </div>
                     </div>
@@ -133,6 +154,11 @@ const Account: React.FC = () => {
                             if (isEditingPreferences) {
                                 setSelectedGames(preferences.interestedGames || []);
                                 setShoppingMode(preferences.shoppingMode || 'mix');
+                                setZipCode(preferences.zipCode || '');
+                                setUseBrowserLocation(preferences.useBrowserLocation || false);
+                                setLatitude(preferences.latitude ?? null);
+                                setLongitude(preferences.longitude ?? null);
+                                setLocationCityState(preferences.locationCityState || '');
                                 setEmailNewsletter(preferences.emailNewsletter ?? true);
                             }
                             setIsEditingPreferences(!isEditingPreferences);
@@ -145,7 +171,7 @@ const Account: React.FC = () => {
 
                 {!isEditingPreferences ? (
                     /* Read-Only Summary */
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10">
                             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                                 Interested Games ({preferences.interestedGames?.length || 0})
@@ -177,6 +203,22 @@ const Account: React.FC = () => {
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 Prioritizes inventory according to your local and online balance.
+                            </p>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200/80 dark:border-white/10">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <MapPin size={13} className="text-blue-600 dark:text-violet-400" /> Location / Area
+                            </h4>
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                                {preferences.useBrowserLocation && preferences.latitude !== null
+                                    ? (preferences.locationCityState || `GPS (Lat: ${preferences.latitude?.toFixed(2)})`)
+                                    : preferences.zipCode
+                                    ? `ZIP Code: ${preferences.zipCode}`
+                                    : 'Not specified'}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                Used for store pickup and distance calculations.
                             </p>
                         </div>
 
@@ -216,6 +258,20 @@ const Account: React.FC = () => {
                             <ShoppingModeSelector
                                 selectedMode={shoppingMode}
                                 onChange={setShoppingMode}
+                                compact={true}
+                            />
+                        </div>
+
+                        <div>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white mb-3">Location & Local Pickup Area</h4>
+                            <LocationSelector
+                                zipCode={zipCode}
+                                useBrowserLocation={useBrowserLocation}
+                                latitude={latitude}
+                                longitude={longitude}
+                                locationCityState={locationCityState}
+                                shoppingMode={shoppingMode}
+                                onChange={handleLocationChange}
                                 compact={true}
                             />
                         </div>

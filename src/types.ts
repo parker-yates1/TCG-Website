@@ -72,6 +72,11 @@ export interface UserPreferences {
     shoppingMode: ShoppingMode | null;
     emailNewsletter: boolean;
     onboardingCompleted: boolean;
+    zipCode?: string;
+    useBrowserLocation?: boolean;
+    latitude?: number | null;
+    longitude?: number | null;
+    locationCityState?: string;
 }
 
 export interface UserProfile {
